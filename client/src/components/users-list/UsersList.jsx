@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { getAllUsers } from '../../utils/api';
 import User from '../user/User';
 
-const UsersList = ({
-	setCurrentUser,
-	setCreateUser,
-	setEditUser,
-	setDeleteUser
-}) => {
+const UsersList = ({ dispatchUserStatus }) => {
 	const [users, setUsers] = useState([]);
 
 	useEffect(() => {
@@ -18,12 +13,7 @@ const UsersList = ({
 		<div>
 			<button
 				onClick={() =>
-					handleCreateUser(
-						setCurrentUser,
-						setCreateUser,
-						setEditUser,
-						setDeleteUser
-					)
+					dispatchUserStatus({ type: 'CREATE', payload: { currentUser: null } })
 				}
 			>
 				Create New User
@@ -32,25 +22,11 @@ const UsersList = ({
 				<User
 					key={user.userId}
 					user={user}
-					setCurrentUser={() => setCurrentUser(user)}
-					setEditUser={setEditUser}
-					setDeleteUser={setDeleteUser}
+					dispatchUserStatus={dispatchUserStatus}
 				/>
 			))}
 		</div>
 	);
-};
-
-const handleCreateUser = (
-	setCurrentUser,
-	setCreateUser,
-	setEditUser,
-	setDeleteUser
-) => {
-	setCurrentUser(null);
-	setCreateUser(true);
-	setEditUser(false);
-	setDeleteUser(false);
 };
 
 export default UsersList;

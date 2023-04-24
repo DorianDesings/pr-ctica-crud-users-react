@@ -1,4 +1,3 @@
-import { getUserById } from '../../utils/api';
 import {
 	StyledName,
 	StyledUser,
@@ -8,7 +7,7 @@ import {
 	StyledUsername
 } from './styles';
 
-const User = ({ user, setCurrentUser, setEditUser, setDeleteUser }) => {
+const User = ({ user, dispatchUserStatus }) => {
 	return (
 		<StyledUser>
 			<StyledUserInfo>
@@ -21,20 +20,28 @@ const User = ({ user, setCurrentUser, setEditUser, setDeleteUser }) => {
 			<p>{user.active ? 'Activo' : 'Inactivo'}</p>
 			<StyledUserOptions>
 				<button
-					onClick={() => handleShowDetails(user, setCurrentUser, setEditUser)}
+					onClick={() =>
+						dispatchUserStatus({
+							type: 'DETAILS',
+							payload: { user }
+						})
+					}
 				>
 					Show Details
 				</button>
 				<button
 					onClick={() =>
-						handleEditUser(user, setCurrentUser, setEditUser, setDeleteUser)
+						dispatchUserStatus({ type: 'EDIT', payload: { user } })
 					}
 				>
 					Edit
 				</button>
 				<button
 					onClick={() =>
-						handleDeleteUser(user, setCurrentUser, setEditUser, setDeleteUser)
+						dispatchUserStatus({
+							type: 'DELETE',
+							payload: { user }
+						})
 					}
 				>
 					Delete
@@ -44,22 +51,22 @@ const User = ({ user, setCurrentUser, setEditUser, setDeleteUser }) => {
 	);
 };
 
-const handleShowDetails = (user, setCurrentUser, setEditUser) => {
-	setCurrentUser(user);
-	setEditUser(false);
-	getUserById(user.userId);
-};
+// const handleShowDetails = (user, setCurrentUser, setEditUser) => {
+// 	setCurrentUser(user);
+// 	setEditUser(false);
+// 	getUserById(user.userId);
+// };
 
-const handleDeleteUser = (user, setCurrentUser, setEditUser, setDeleteUser) => {
-	setCurrentUser(user);
-	setEditUser(false);
-	setDeleteUser(true);
-};
+// const handleDeleteUser = (user, setCurrentUser, setEditUser, setDeleteUser) => {
+// 	setCurrentUser(user);
+// 	setEditUser(false);
+// 	setDeleteUser(true);
+// };
 
-const handleEditUser = (user, setCurrentUser, setEditUser, setDeleteUser) => {
-	setCurrentUser(user);
-	setEditUser(true);
-	setDeleteUser(false);
-};
+// const handleEditUser = (user, setCurrentUser, setEditUser, setDeleteUser) => {
+// 	setCurrentUser(user);
+// 	setEditUser(true);
+// 	setDeleteUser(false);
+// };
 
 export default User;
