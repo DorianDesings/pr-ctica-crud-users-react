@@ -7,6 +7,7 @@ const UserDetails = ({ user }) => {
 			<h2>
 				{user.title} {user.name}
 			</h2>
+			<p>@{user.username}</p>
 			<p>Status: {user.active ? 'Active' : 'Inactive'}</p>
 		</StyledDetails>
 	);
