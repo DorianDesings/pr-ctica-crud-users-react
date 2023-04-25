@@ -10,14 +10,13 @@ const UsersList = ({ dispatchUserStatus, users }) => {
 			>
 				Create New User
 			</button>
-			{users.length > 0 &&
-				users.map(user => (
-					<User
-						key={user.userId}
-						user={user}
-						dispatchUserStatus={dispatchUserStatus}
-					/>
-				))}
+			{users.map(user => (
+				<User
+					key={user.userId}
+					user={user}
+					dispatchUserStatus={dispatchUserStatus}
+				/>
+			))}
 		</div>
 	);
 };

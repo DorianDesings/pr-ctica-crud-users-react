@@ -1,9 +1,11 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
+import { USER_STATUS_ACTIONS } from '../../actions/user-status.actions';
+import { METHODS } from '../../constants/methods';
+import useFetch from '../../hooks/useFetch';
 import {
 	USER_LIST_INITIAL_STATE,
 	userListReducer
 } from '../../reducers/user-list-reducer';
-import { getAllUsers } from '../../utils/api';
 import UserCreate from '../user-create/UserCreate';
 import UserDelete from '../user-delete/UserDelete';
 import UserDetails from '../user-details/UserDetails';
@@ -17,41 +19,44 @@ const MainContainer = () => {
 		USER_LIST_INITIAL_STATE
 	);
 
-	const [users, setUsers] = useState([]);
+	const [fetchInfo, setFetchInfo] = useState({
+		url: 'http://127.0.0.1:3000/api/users',
+		method: METHODS.GET,
+		headers: undefined
+	});
 
-	useEffect(() => {
-		getAllUsers(setUsers);
-	}, []);
+	const { data, loading, error } = useFetch(fetchInfo.url, { ...fetchInfo });
+
+	if (loading && !error) return <h2>Loading CRUD...</h2>;
+
+	if (error) return <h2>Somethig wrong!!</h2>;
 
 	return (
 		<>
-			<h1 style={{ textAlign: 'center' }}>USERS CRUD REACT</h1>
-
 			<StyledMain>
-				<UsersList dispatchUserStatus={dispatchUserStatus} users={users} />
+				<UsersList dispatchUserStatus={dispatchUserStatus} users={data} />
 
-				{userStatus.mode === 'DETAILS' && (
+				{userStatus.mode === USER_STATUS_ACTIONS.DETAILS && (
 					<UserDetails
 						user={userStatus.currentUser}
-						setEditUser={dispatchUserStatus}
+						dispatchUserStatus={dispatchUserStatus}
 					/>
 				)}
 
-				{userStatus.mode === 'CREATE' && <UserCreate setUsers={setUsers} />}
+				{userStatus.mode === USER_STATUS_ACTIONS.CREATE && <UserCreate />}
 
-				{userStatus.mode === 'EDIT' && (
+				{userStatus.mode === USER_STATUS_ACTIONS.EDIT && (
 					<UserEdit
 						user={userStatus.currentUser}
 						dispatchUserStatus={dispatchUserStatus}
-						setUsers={setUsers}
 					/>
 				)}
 
-				{userStatus.mode === 'DELETE' && (
+				{userStatus.mode === USER_STATUS_ACTIONS.DELETE && (
 					<UserDelete
 						user={userStatus.currentUser}
 						dispatchUserStatus={dispatchUserStatus}
-						setUsers={setUsers}
+						setFetchInfo={setFetchInfo}
 					/>
 				)}
 			</StyledMain>
