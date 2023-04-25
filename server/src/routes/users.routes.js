@@ -5,9 +5,6 @@ const controller = require('../controllers/users.controller');
 // Obtener todos los usuarios
 userRoutes.get('/', controller.allUsers);
 
-// Obtener un usuario por ID
-userRoutes.get('/:id', controller.userById);
-
 // Crear un usuario
 userRoutes.post('/', controller.createUser);
 

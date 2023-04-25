@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { updateUser } from '../../utils/api';
 import { StyledEdit } from './styles';
 
-const UserEdit = ({ user, setEditUser }) => {
+const UserEdit = ({ user, dispatchUserStatus, setUsers }) => {
 	const [userInfo, setUserInfo] = useState(user);
 	return (
 		<StyledEdit>
@@ -33,10 +34,21 @@ const UserEdit = ({ user, setEditUser }) => {
 					onChange={e => setUserInfo({ ...userInfo, active: e.target.checked })}
 				/>
 			</div>
-			<button onClick={() => setEditUser(false)}>SAVE CHANGES</button>
-			<button onClick={() => setEditUser(false)}>CANCEL</button>
+			<button
+				onClick={() => handleSaveNewData(user.userId, userInfo, setUsers)}
+			>
+				SAVE CHANGES
+			</button>
+			<button onClick={() => handleCancel(dispatchUserStatus)}>CANCEL</button>
 		</StyledEdit>
 	);
+};
+
+const handleCancel = dispatchUserStatus => {
+	dispatchUserStatus({ type: 'CREATE', payload: { currentUser: null } });
+};
+const handleSaveNewData = async (userId, userInfo, setUsers) => {
+	updateUser(userId, userInfo, setUsers);
 };
 
 export default UserEdit;

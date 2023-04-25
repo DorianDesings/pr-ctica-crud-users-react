@@ -17,22 +17,6 @@ controller.allUsers = (req, res) => {
   });
 };
 
-// Obtener un usuario por id
-controller.userById = (req, res) => {
-  fs.readFile(usersFile, 'utf8', (err, data) => {
-    if (err)
-      return res
-        .status(500)
-        .send({ error: 'Error al leer el archivo de usuarios' });
-
-    const users = JSON.parse(data);
-    const user = users.find(user => user.userId === req.params.id);
-
-    if (!user) return res.status(404).send({ error: 'Usuario no encontrado' });
-    res.send(user);
-  });
-};
-
 // Crear un usuario nuevo
 controller.createUser = (req, res) => {
   fs.readFile(usersFile, (err, data) => {
@@ -52,8 +36,7 @@ controller.createUser = (req, res) => {
 
     const newUser = {
       userId: v4(),
-      name: req.body.name,
-      email: req.body.email
+      ...req.body
     };
 
     users.push(newUser);
@@ -64,7 +47,7 @@ controller.createUser = (req, res) => {
           .status(500)
           .send({ error: 'Error al guardar el archivo de usuarios' });
 
-      res.send({ message: 'Nuevo usuario creado' });
+      res.status(200).send(users);
     });
   });
 };
@@ -78,12 +61,16 @@ controller.updateUser = (req, res) => {
 
     const users = JSON.parse(data);
 
-    const user = users.find(user => user.userId === req.params.id);
+    const userIndex = users.findIndex(user => user.userId === req.params.id);
 
-    if (!user) res.status(404).send({ error: 'Usuario no encontrado' });
+    if (userIndex === -1)
+      res.status(404).send({ error: 'Usuario no encontrado' });
 
-    user.name = req.body.name;
-    user.email = req.body.email;
+    let user = users[userIndex];
+
+    user = { ...user, ...req.body };
+
+    users[userIndex] = user;
 
     fs.writeFile(usersFile, JSON.stringify(users), err => {
       if (err) {
@@ -91,7 +78,7 @@ controller.updateUser = (req, res) => {
           .status(500)
           .send({ error: 'Error al guardar el archivo de usuarios' });
       }
-      res.send({ message: 'Usuario actualizado correctamente', user });
+      res.status(200).send(users);
     });
   });
 };
@@ -123,9 +110,7 @@ controller.deleteUser = (req, res) => {
           .send({ error: 'Error al guardar el archivo de usuarios' });
       }
 
-      res
-        .status(200)
-        .send({ message: `Usuario con ID ${req.params.id} eliminado` });
+      res.status(200).send(users);
     });
   });
 };

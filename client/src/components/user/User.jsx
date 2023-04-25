@@ -51,22 +51,4 @@ const User = ({ user, dispatchUserStatus }) => {
 	);
 };
 
-// const handleShowDetails = (user, setCurrentUser, setEditUser) => {
-// 	setCurrentUser(user);
-// 	setEditUser(false);
-// 	getUserById(user.userId);
-// };
-
-// const handleDeleteUser = (user, setCurrentUser, setEditUser, setDeleteUser) => {
-// 	setCurrentUser(user);
-// 	setEditUser(false);
-// 	setDeleteUser(true);
-// };
-
-// const handleEditUser = (user, setCurrentUser, setEditUser, setDeleteUser) => {
-// 	setCurrentUser(user);
-// 	setEditUser(true);
-// 	setDeleteUser(false);
-// };
-
 export default User;

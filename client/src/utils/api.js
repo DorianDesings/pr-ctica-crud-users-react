@@ -8,15 +8,7 @@ export const getAllUsers = async setUsers => {
 	setUsers(data);
 };
 
-export const getUserById = async userId => {
-	const data = await fetchData(`http://127.0.0.1:3000/api/users/${userId}`, {
-		method: METHODS.GET
-	});
-
-	console.log(data);
-};
-
-export const createUser = async newUser => {
+export const createUser = async (newUser, setUsers) => {
 	const data = await fetchData(`http://127.0.0.1:3000/api/users/`, {
 		method: METHODS.POST,
 		body: JSON.stringify(newUser),
@@ -26,30 +18,28 @@ export const createUser = async newUser => {
 		}
 	});
 
+	setUsers(data);
+};
+
+export const updateUser = async (userId, newData, setUsers) => {
+	const data = await fetchData(`http://127.0.0.1:3000/api/users/${userId}`, {
+		method: METHODS.PATCH,
+		body: JSON.stringify(newData),
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		}
+	});
+
 	console.log(data);
+
+	setUsers(data);
 };
 
-export const updateUser = async (isEditing, setIsEditing, name, userId) => {
-	if (isEditing) {
-		const data = await fetchData(`http://127.0.0.1:3000/api/users/${userId}`, {
-			method: METHODS.PATCH,
-			body: JSON.stringify({ name }),
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			}
-		});
-
-		console.log(data);
-	}
-
-	setIsEditing(!isEditing);
-};
-
-export const deleteUser = async userId => {
+export const deleteUser = async (userId, setUsers) => {
 	const data = await fetchData(`http://127.0.0.1:3000/api/users/${userId}`, {
 		method: METHODS.DELETE
 	});
 
-	console.log(data);
+	setUsers(data);
 };

@@ -1,14 +1,6 @@
-import { useEffect, useState } from 'react';
-import { getAllUsers } from '../../utils/api';
 import User from '../user/User';
 
-const UsersList = ({ dispatchUserStatus }) => {
-	const [users, setUsers] = useState([]);
-
-	useEffect(() => {
-		getAllUsers(setUsers);
-	}, []);
-
+const UsersList = ({ dispatchUserStatus, users }) => {
 	return (
 		<div>
 			<button
@@ -18,13 +10,14 @@ const UsersList = ({ dispatchUserStatus }) => {
 			>
 				Create New User
 			</button>
-			{users.map(user => (
-				<User
-					key={user.userId}
-					user={user}
-					dispatchUserStatus={dispatchUserStatus}
-				/>
-			))}
+			{users.length > 0 &&
+				users.map(user => (
+					<User
+						key={user.userId}
+						user={user}
+						dispatchUserStatus={dispatchUserStatus}
+					/>
+				))}
 		</div>
 	);
 };
