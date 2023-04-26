@@ -1,17 +1,9 @@
-import { useState } from 'react';
+import { useForm } from '../../hooks/useForm';
+import { createUser, resetCrud } from '../../utils/api';
 
-const UserCreate = () => {
-	const [userInfo, setUserInfo] = useState({
-		name: undefined,
-		title: undefined,
-		age: undefined,
-		username: undefined,
-		email: undefined,
-		gender: 'men',
-		profileImage: undefined
-	});
+const UserCreate = ({ dispatchUserStatus, setFetchInfo }) => {
+	const { userInfo, saveFormData, setNewProfileImage } = useForm();
 
-	console.log(userInfo);
 	return (
 		<div>
 			<h2>Create User</h2>
@@ -22,7 +14,7 @@ const UserCreate = () => {
 						type='text'
 						name='name'
 						id='name'
-						onChange={e => setUserInfo({ ...userInfo, name: e.target.value })}
+						onChange={e => saveFormData('name', e.target.value)}
 					/>
 				</div>
 				<div>
@@ -37,9 +29,7 @@ const UserCreate = () => {
 							id='men'
 							value='men'
 							defaultChecked
-							onChange={e =>
-								setUserInfo({ ...userInfo, gender: e.target.value })
-							}
+							onChange={e => saveFormData('gender', e.target.value)}
 						/>
 						<label htmlFor='women'>Woman</label>
 						<input
@@ -47,27 +37,20 @@ const UserCreate = () => {
 							name='gender'
 							id='women'
 							value='women'
-							onChange={e =>
-								setUserInfo({ ...userInfo, gender: e.target.value })
-							}
+							onChange={e => saveFormData('gender', e.target.value)}
 						/>
 					</div>
-					<button onClick={() => generateRandomImage(userInfo, setUserInfo)}>
-						Generate Image
-					</button>
+					<button onClick={setNewProfileImage}>Generate Image</button>
 				</div>
 			</form>
+			<button
+				onClick={() => createUser(userInfo, setFetchInfo, dispatchUserStatus)}
+			>
+				CREATE USER
+			</button>
+			<button onClick={() => resetCrud(dispatchUserStatus)}>CANCEL</button>
 		</div>
 	);
-};
-
-const generateRandomImage = (userInfo, setUserInfo) => {
-	const { gender } = userInfo;
-	const randomNumber = Math.floor(Math.random() * 99);
-	setUserInfo({
-		...userInfo,
-		profileImage: `https://randomuser.me/api/portraits/${gender}/${randomNumber}.jpg`
-	});
 };
 
 export default UserCreate;

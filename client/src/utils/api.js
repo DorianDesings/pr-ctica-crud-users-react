@@ -1,5 +1,11 @@
 import { METHODS } from '../constants/methods';
+import { URL_BASE } from '../constants/urls';
 import { fetchData } from './fetchData';
+
+const headers = {
+	Accept: 'application/json',
+	'Content-Type': 'application/json'
+};
 
 export const getAllUsers = async setUsers => {
 	const data = await fetchData('http://127.0.0.1:3000/api/users', {
@@ -8,38 +14,40 @@ export const getAllUsers = async setUsers => {
 	setUsers(data);
 };
 
-export const createUser = async (newUser, setUsers) => {
-	const data = await fetchData(`http://127.0.0.1:3000/api/users/`, {
+export const createUser = (userInfo, setFetchInfo, dispatchUserStatus) => {
+	setFetchInfo({
+		url: `${URL_BASE}`,
+		body: JSON.stringify(userInfo),
 		method: METHODS.POST,
-		body: JSON.stringify(newUser),
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json'
-		}
+		headers
 	});
-
-	setUsers(data);
+	resetCrud(dispatchUserStatus);
 };
 
-export const updateUser = async (userId, newData, setUsers) => {
-	const data = await fetchData(`http://127.0.0.1:3000/api/users/${userId}`, {
+export const updateUser = (
+	userId,
+	userInfo,
+	setFetchInfo,
+	dispatchUserStatus
+) => {
+	setFetchInfo({
+		url: `${URL_BASE}${userId}`,
+		body: JSON.stringify(userInfo),
 		method: METHODS.PATCH,
-		body: JSON.stringify(newData),
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json'
-		}
+		headers
 	});
 
-	console.log(data);
-
-	setUsers(data);
+	resetCrud(dispatchUserStatus);
 };
 
-export const deleteUser = async (userId, setUsers) => {
-	const data = await fetchData(`http://127.0.0.1:3000/api/users/${userId}`, {
+export const deleteUser = async (userId, setFetchInfo, dispatchUserStatus) => {
+	setFetchInfo({
+		url: `${URL_BASE}${userId}`,
 		method: METHODS.DELETE
 	});
+	resetCrud(dispatchUserStatus);
+};
 
-	setUsers(data);
+export const resetCrud = dispatchUserStatus => {
+	dispatchUserStatus({ type: 'CREATE', payload: { currentUser: null } });
 };

@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 
 const fetchData = async (url, setFetchStatus, ...options) => {
-	console.log(options);
 	try {
 		const response = await fetch(url, ...options);
 		const data = await response.json();
 		setFetchStatus({ data, loading: false, error: undefined });
 
-		console.log(data);
+		// console.log(data);
 	} catch (err) {
 		setFetchStatus({ data: undefined, loading: false, error: err });
 	}
 };
 
 const useFetch = (url, ...options) => {
+	const body = options[0].body;
 	const [fetchStatus, setFetchStatus] = useState({
 		data: undefined,
 		loading: true,
@@ -21,7 +21,7 @@ const useFetch = (url, ...options) => {
 	});
 	useEffect(() => {
 		fetchData(url, setFetchStatus, ...options);
-	}, [url]);
+	}, [url, body]);
 
 	return { ...fetchStatus };
 };

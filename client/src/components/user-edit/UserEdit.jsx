@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { updateUser } from '../../utils/api';
+import { resetCrud, updateUser } from '../../utils/api';
 import { StyledEdit } from './styles';
 
-const UserEdit = ({ user, dispatchUserStatus, setUsers }) => {
+const UserEdit = ({ user, dispatchUserStatus, setFetchInfo }) => {
 	const [userInfo, setUserInfo] = useState(user);
+
 	return (
 		<StyledEdit>
 			<h2>Edit User</h2>
@@ -35,20 +36,15 @@ const UserEdit = ({ user, dispatchUserStatus, setUsers }) => {
 				/>
 			</div>
 			<button
-				onClick={() => handleSaveNewData(user.userId, userInfo, setUsers)}
+				onClick={() =>
+					updateUser(user.userId, userInfo, setFetchInfo, dispatchUserStatus)
+				}
 			>
 				SAVE CHANGES
 			</button>
-			<button onClick={() => handleCancel(dispatchUserStatus)}>CANCEL</button>
+			<button onClick={() => resetCrud(dispatchUserStatus)}>CANCEL</button>
 		</StyledEdit>
 	);
-};
-
-const handleCancel = dispatchUserStatus => {
-	dispatchUserStatus({ type: 'CREATE', payload: { currentUser: null } });
-};
-const handleSaveNewData = async (userId, userInfo, setUsers) => {
-	updateUser(userId, userInfo, setUsers);
 };
 
 export default UserEdit;

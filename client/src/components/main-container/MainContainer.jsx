@@ -43,12 +43,18 @@ const MainContainer = () => {
 					/>
 				)}
 
-				{userStatus.mode === USER_STATUS_ACTIONS.CREATE && <UserCreate />}
+				{userStatus.mode === USER_STATUS_ACTIONS.CREATE && (
+					<UserCreate
+						setFetchInfo={setFetchInfo}
+						dispatchUserStatus={dispatchUserStatus}
+					/>
+				)}
 
 				{userStatus.mode === USER_STATUS_ACTIONS.EDIT && (
 					<UserEdit
 						user={userStatus.currentUser}
 						dispatchUserStatus={dispatchUserStatus}
+						setFetchInfo={setFetchInfo}
 					/>
 				)}
 

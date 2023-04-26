@@ -53,6 +53,7 @@ controller.createUser = (req, res) => {
 };
 
 controller.updateUser = (req, res) => {
+  console.log(req.body);
   fs.readFile(usersFile, (err, data) => {
     if (err)
       return res
