@@ -2,11 +2,6 @@ import { METHODS } from '../constants/methods';
 import { URL_BASE } from '../constants/urls';
 import { fetchData } from './fetchData';
 
-const headers = {
-	Accept: 'application/json',
-	'Content-Type': 'application/json'
-};
-
 export const getAllUsers = async setUsers => {
 	const data = await fetchData('http://127.0.0.1:3000/api/users', {
 		method: METHODS.GET
@@ -18,8 +13,7 @@ export const createUser = (userInfo, setFetchInfo, dispatchUserStatus) => {
 	setFetchInfo({
 		url: `${URL_BASE}`,
 		body: JSON.stringify(userInfo),
-		method: METHODS.POST,
-		headers
+		method: METHODS.POST
 	});
 	resetCrud(dispatchUserStatus);
 };
